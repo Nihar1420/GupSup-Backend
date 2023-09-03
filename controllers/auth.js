@@ -10,6 +10,16 @@ const register = async (req, res) => {
         message: "Enter the required details",
       });
     }
+    const emailExists = await registeredUserModel.findOne({
+      userEmail: userEmail,
+    });
+    if (emailExists) {
+      return res.status(200).json({
+        success: false,
+        message: "Email already exists",
+        status: 400,
+      });
+    }
     const hashedPassword = await bcrypt.hash(userPassword, 10);
     const registerUser = await registeredUserModel.create({
       userName,
@@ -21,13 +31,55 @@ const register = async (req, res) => {
     if (!registerUser) {
       return res.status(502).json({
         success: false,
-        messgae: "Something went wrong",
+        message: "Something went wrong",
       });
     }
     return res.status(200).json({
       success: true,
       data: registerUser,
       message: "User registered successfully",
+      status: 200,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
+const login = async (req, res) => {
+  try {
+    const { userEmail, userPassword } = req.body;
+    if (!userEmail || !userPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter the required details",
+      });
+    }
+    const findUser = await registeredUserModel.findOne({
+      userEmail: userEmail,
+    });
+    if (!findUser) {
+      return res.status(400).json({
+        success: false,
+        message: "User doesn't exist",
+      });
+    }
+    const checkPassword = await bcrypt.compare(
+      userPassword,
+      findUser.userPassword
+    );
+    if (!checkPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter the correct password",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Login successfull",
+      data: findUser,
     });
   } catch (error) {
     return res.status(400).json({
@@ -39,6 +91,7 @@ const register = async (req, res) => {
 
 const authController = {
   register,
+  login,
 };
 
 module.exports = authController;
