@@ -61,9 +61,10 @@ const login = async (req, res) => {
       userEmail: userEmail,
     });
     if (!findUser) {
-      return res.status(400).json({
+      return res.status(200).json({
         success: false,
         message: "User doesn't exist",
+        status: 400,
       });
     }
     const checkPassword = await bcrypt.compare(
@@ -71,15 +72,17 @@ const login = async (req, res) => {
       findUser.userPassword
     );
     if (!checkPassword) {
-      return res.status(400).json({
+      return res.status(200).json({
         success: false,
         message: "Please enter the correct password",
+        status: 400,
       });
     }
     return res.status(200).json({
       success: true,
       message: "Login successfull",
       data: findUser,
+      status: 200,
     });
   } catch (error) {
     return res.status(400).json({

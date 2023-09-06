@@ -17,8 +17,19 @@ const registeredUserSchema = mongoose.Schema({
     type: String,
     require: true,
   },
+  isAvatarImageSet: {
+    type: Boolean,
+    default: false,
+  },
+  avatarImage: {
+    type: String,
+    default: "",
+  },
 });
 
-const registeredUserModel = mongoose.model('RegisteredUsers' , registeredUserSchema);
+const registeredUserModel = mongoose.model(
+  "RegisteredUsers",
+  registeredUserSchema
+);
 
 module.exports = registeredUserModel;
