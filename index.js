@@ -6,6 +6,7 @@ const dbConnect = require("./config/db_config.js");
 const authRouter = require("./routes/authRoute.js");
 const profileRouter = require("./routes/profileRoute.js");
 const usersRouter = require("./routes/usersRoute.js");
+const messageRouter = require("./routes/messageRoute.js");
 
 const app = express();
 
@@ -13,7 +14,8 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/profile", profileRouter);
-app.use('/api/users',usersRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/message", messageRouter);
 dbConnect();
 app.listen(PORT, () => {
   console.log(`The server is up and running on PORT : ${PORT}`);
