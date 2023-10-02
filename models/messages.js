@@ -7,11 +7,16 @@ const messageModel = mongoose.Schema(
         type: String,
         required: true,
       },
-      users: Array,
-      senderId: {
+    },
+    users: [
+      {
         type: mongoose.Schema.Types.ObjectId,
         ref: "RegisteredUsers",
       },
+    ],
+    senderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "RegisteredUsers",
     },
   },
   {
